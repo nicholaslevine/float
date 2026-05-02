@@ -69,7 +69,7 @@ void setup() {
   Wire.begin();
 
   while (!sensor.init()) {
-    Serial.println("Sensor init failed!");
+    Serial.println("Sensor initialization failed!");
     delay(2000);
   }
   sensor.setFluidDensity(997);
@@ -78,7 +78,7 @@ void setup() {
   servo2.attach(SERVO2_PIN);
 
   WiFi.begin(ssid, password);
-  Serial.print("Connecting to WiFi");
+  Serial.print("Connecting...");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -97,7 +97,7 @@ void loop() {
     logData[logIndex++] = {millis() / 1000.0, depth};
   }
 
-  // Safety: don't hit ice
+  
   if (depth < 0.3) {
     setBuoyancy(-15);
   }
@@ -107,7 +107,7 @@ void loop() {
     case WAIT_FOR_CLIENT:
       client = server.available();
       if (client) {
-        client.println("FLOAT READY");
+        client.println("Float is ready!");
         state = READY;
       }
       break;
@@ -156,7 +156,7 @@ void loop() {
       setBuoyancy(0);
 
       if (client && client.connected()) {
-        client.println("MISSION COMPLETE");
+        client.println("profile completed");
         client.println("time,depth");
 
         for (int i = 0; i < logIndex; i++) {
